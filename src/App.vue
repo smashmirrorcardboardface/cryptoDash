@@ -1,14 +1,13 @@
 <template>
   <div class="container">
-    <SummaryDollarValue></SummaryDollarValue>
-    {{cryptoListing.data}}
+    <h2>Top 10 Crypto Currencies by Rank</h2>
+    <SummaryDollarValue :ticker="cryptoListing"></SummaryDollarValue>
   </div>
 </template>
 
 <script>
 import SummaryDollarValue from './components/SummaryDollarValue';
 import axios from 'axios';
-const API_KEY = 'AIzaSyAKV4Nn-zOThQqqnvXPCghTHqiO_zYNKfw';
 
 export default {
   name: 'App',
@@ -16,17 +15,27 @@ export default {
     SummaryDollarValue: SummaryDollarValue
   },
   data() {
+    //to populate from coinmarket Ticker Endpoint
     return { cryptoListing: [] };
   },
   methods: {},
   mounted: function() {
+    //get data on app load.
     axios
-      .get('https://api.coinmarketcap.com/v2/ticker/', {
+      .get('https://api.coinmarketcap.com/v2/ticker/?limit=10', {
         params: {}
       })
       .then(res => {
-        this.cryptoListing = res.data;
+        //TODO - move this to method
+        this.cryptoListing = sortBy(
+          Object.values(res.data.data),
+          o => o['rank']
+        );
       });
   }
 };
+
+function sortBy(list, keyFunc) {
+  return list.sort((a, b) => keyFunc(a) - keyFunc(b));
+}
 </script>
