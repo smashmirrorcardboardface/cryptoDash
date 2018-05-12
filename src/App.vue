@@ -9,12 +9,12 @@
 </template>
 
 <script>
-import SummaryDollarValue from './components/SummaryDollarValue';
-import Portfolio from './components/Portfolio';
-import axios from 'axios';
+import SummaryDollarValue from "./components/SummaryDollarValue";
+import Portfolio from "./components/Portfolio";
+import axios from "axios";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
     SummaryDollarValue: SummaryDollarValue,
     Portfolio: Portfolio
@@ -27,14 +27,14 @@ export default {
   mounted: function() {
     //get data on app load.
     axios
-      .get('https://api.coinmarketcap.com/v2/ticker/?limit=8', {
+      .get("https://api.coinmarketcap.com/v2/ticker/?limit=8", {
         params: {}
       })
       .then(res => {
         //TODO - move this to method
         this.cryptoListing = sortBy(
           Object.values(res.data.data),
-          o => o['rank']
+          o => o["rank"]
         );
       });
   }
