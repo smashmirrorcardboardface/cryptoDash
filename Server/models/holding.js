@@ -10,11 +10,17 @@ const holding = new mongoose.Schema(
     },
     id: {
       type: Number
-    }
+    },
+    name: { type: String },
+    dollarValue: { type: SchemaTypes.Double }
   },
 
   {
     collection: 'holdings'
+  },
+
+  {
+    versionKey: false // You should be aware of the outcome after set to false
   }
 );
 

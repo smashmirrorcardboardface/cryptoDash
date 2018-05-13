@@ -17,19 +17,5 @@
     name: 'holding-summary',
 
     props: ['holding'],
-    mounted() {
-
-    },
-    data() {
-      return {
-
-      }
-    },
-    methods: {
-
-    },
-    computed: {
-
-    }
 }
 </script>

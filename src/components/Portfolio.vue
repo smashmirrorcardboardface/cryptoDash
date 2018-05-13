@@ -4,7 +4,7 @@
   <b-card bg-variant="info" text-variant="white">
     <div slot="header" class="row">
       <div class="col-md-6"><h4>Portfolio - Total Holdings: {{totalHoldings}}(USD)</h4></div>
-      <div class="col-md-6 text-right"><b-btn variant="light" v-b-modal.modal1>Add New Holding</b-btn></div>
+      <div class="col-md-6 text-right"><b-btn variant="light" v-b-modal.addHoldingModal>Add New Holding</b-btn></div>
     </div>
     <p class="card-text">
     Current Holdings
@@ -15,12 +15,19 @@
     </p>
   </b-card>
     <!-- Modal Component -->
-  <b-modal id="modal1" title="Add Holding">
-    <basic-select :options="options"
+  <b-modal id="addHoldingModal" title="Add Holding" v-on:ok="modalOk">
+    <basic-select :options="listingOptions"
                   :selected-option="item"
                   placeholder="select item"
+                  @select="onSelect"
                   >
     </basic-select>
+    <b-form-input class="mt-1"
+                  v-model="quantityInput"
+                  type="text"
+                  placeholder="Enter Qty.">
+    </b-form-input>
+    
   </b-modal>
  </section>
 
@@ -30,13 +37,43 @@
 import axios from 'axios';
 import HoldingSummary from './HoldingSummary';
 
-import { BasicSelect } from 'vue-search-select'
+//TODO: ADD Delete nd Update methods
 
-  export default  {
-    name: 'portfolio',
-    props: ['listings'],
-    components:{HoldingSummary, BasicSelect},
-    mounted() {
+import { BasicSelect } from 'vue-search-select';
+
+export default  {
+  name: 'portfolio',
+  props: ['listings'],
+  components:{HoldingSummary, BasicSelect},
+  mounted() {
+    this.getHoldingsDetail();
+  },
+  data() {
+    return {
+
+      totalHoldings:0,
+      currentHoldings:[],
+      searchText: '', // If value is falsy, reset searchText & searchItem
+      item: {
+        value: '',
+        text: ''
+      },
+      quantityInput:0
+      //currentHoldings:[{id:1, quantity:0.3, dollarValue:0, name:null},{id:10, quantity:50, dollarValue:0, name:null}]//testData
+    }
+  },
+  computed: {
+        listingOptions(){
+          let listingOptionArray=[];
+          this.listings.map((item, index)=>{
+            let optionObject={value:item.id, text:item.name};
+            listingOptionArray.push(optionObject);
+          });
+          return listingOptionArray;
+        }
+  },
+  methods:{
+    getHoldingsDetail(){
       axios.get('http://localhost:4000/holding/').then((result) => {
         this.currentHoldings=result.data;
         console.info(this.currentHoldings);
@@ -53,27 +90,30 @@ import { BasicSelect } from 'vue-search-select'
           })
         })
       })
-      
-    
+    },      
+    onSelect (item) {
+      this.item = item
     },
-    data() {
-      return {
-        options:[{ value: '1', text: 'aa' + ' - ' + '1' },
-          { value: '2', text: 'ab' + ' - ' + '2' },
-          { value: '3', text: 'bc' + ' - ' + '3' },
-          { value: '4', text: 'cd' + ' - ' + '4' },
-          { value: '5', text: 'de' + ' - ' + '5' }],
-        totalHoldings:0,
-        currentHoldings:[],
-        searchText: '', // If value is falsy, reset searchText & searchItem
-        item: {
-          value: '',
-          text: ''
-        }
-        //currentHoldings:[{id:1, quantity:0.3, dollarValue:0, name:null},{id:10, quantity:50, dollarValue:0, name:null}]//testData
-      }
+    reset () {
+      this.item = {}
     },
-    methods: {
+    selectOption () {
+      // select option from parent component
+      this.item = this.options[0]
+    },
+    modalOk(){
+      axios.post('http://localhost:4000/holding/add/',
+      {
+        quantity: this.quantityInput,
+        id:this.item.value,
+        name:null,
+        dollarValue:0
+      })
+      .then((res)=>{
+        console.info(res);
+        this.getHoldingsDetail();
+      })
     }
+  }
 }
 </script>
