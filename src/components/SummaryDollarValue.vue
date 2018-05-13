@@ -1,15 +1,15 @@
 <template lang="html">
 
-  <section class="summary-dollar-value">
-    <div class="columns medium-3" v-for="listing in ticker">
-      <div class="card">
-        <div class="card-section">
-          <h5>{{listing.name}}({{listing.symbol}})</h5>
-        </div>
-        <div class="card-divider">
-          ${{listing.quotes.USD.price}}USD
-        </div>    
-      </div>
+  <section class="summary-dollar-value row">
+    <div class="col-sm-4" v-for="listing in ticker">
+      <b-card no-body class="mb-1">
+          <h5 slot="header">{{listing.name}}({{listing.symbol}})</h5>
+          <b-card-body>
+            <p class="card-text">
+              ${{listing.quotes.USD.price}}USD
+            </p>
+          </b-card-body>
+      </b-card>
     </div>
   </section>
 
@@ -18,21 +18,7 @@
 <script lang="js">
   export default  {
     name: 'summary-dollar-value',
-    props: ['ticker'],
-    mounted() {
-
-    },
-    data() {
-      return {
-
-      }
-    },
-    methods: {
-
-    },
-    computed: {
-
-    }
+    props: ['ticker']
 }
 </script>
 

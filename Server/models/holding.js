@@ -5,15 +5,22 @@ var SchemaTypes = mongoose.Schema.Types;
 
 const holding = new mongoose.Schema(
   {
-    currencyName: {
-      type: String
+    quantity: {
+      type: SchemaTypes.Double
     },
-    amount: { type: SchemaTypes.Double },
-    currencyId: { type: Number }
+    id: {
+      type: Number
+    },
+    name: { type: String },
+    dollarValue: { type: SchemaTypes.Double }
   },
 
   {
     collection: 'holdings'
+  },
+
+  {
+    versionKey: false // You should be aware of the outcome after set to false
   }
 );
 

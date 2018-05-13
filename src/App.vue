@@ -1,40 +1,46 @@
 <template>
-  <div class="row">
-  <div class="large-12 columns">
-    <h2>Top Crypto Currencies by Rank</h2>
-    <SummaryDollarValue :ticker="cryptoListing"></SummaryDollarValue>
-    <Portfolio :ticker="cryptoListing"></Portfolio>
+  <div class="container">
+  <div>
+    <h2 class="mt-2">Top Crypto Currencies by Rank</h2>
+    <SummaryDollarValue :ticker="ticker"></SummaryDollarValue>
+    <Portfolio :listings="cryptoListing"></Portfolio>
   </div>
   </div>
 </template>
 
 <script>
-import SummaryDollarValue from "./components/SummaryDollarValue";
-import Portfolio from "./components/Portfolio";
-import axios from "axios";
+import SummaryDollarValue from './components/SummaryDollarValue';
+import Portfolio from './components/Portfolio';
+import axios from 'axios';
 
 export default {
-  name: "App",
+  name: 'App',
   components: {
     SummaryDollarValue: SummaryDollarValue,
     Portfolio: Portfolio
   },
   data() {
     //to populate from coinmarket Ticker Endpoint
-    return { cryptoListing: [] };
+    return { cryptoListing: [], ticker: [] };
   },
   methods: {},
   mounted: function() {
     //get data on app load.
     axios
-      .get("https://api.coinmarketcap.com/v2/ticker/?limit=8", {
+      .get('https://api.coinmarketcap.com/v2/ticker/?limit=6', {
         params: {}
       })
       .then(res => {
-        //TODO - move this to method
+        this.ticker = sortBy(Object.values(res.data.data), o => o['rank']);
+      });
+    axios
+      .get('https://api.coinmarketcap.com/v2/listings/', {
+        params: {}
+      })
+      .then(res => {
         this.cryptoListing = sortBy(
           Object.values(res.data.data),
-          o => o["rank"]
+          o => o['rank']
         );
       });
   }
