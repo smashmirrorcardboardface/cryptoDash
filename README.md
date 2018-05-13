@@ -2,4 +2,7 @@
 
 Crypto currency dashboard
 
-npm run dev to run locally.
+* npm i
+* npm run dev
+
+to run locally.
