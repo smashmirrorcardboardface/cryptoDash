@@ -1,5 +1,4 @@
 module.exports = {
-  DB:
-    'mongodb+srv://jones:antidil69M!@cryptodash-uxcma.mongodb.net/test?retryWrites=true',
+  DB: 'mongodb://jones:antidil69@ds119070.mlab.com:19070/cryptodash',
   APP_PORT: 4000
 };
