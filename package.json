@@ -17,7 +17,7 @@
     "cross-env": "^5.1.5",
     "express": "^4.16.3",
     "method-override": "^2.3.10",
-    "mongoose": "^5.1.0",
+    "mongoose": "^5.7.5",
     "mongoose-double": "0.0.1",
     "vue": "^2.5.16",
     "vue-search-select": "^2.6.1"
